@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getTrendingMovies } from 'api/api';
+import { getTrendingMovies } from '../../api/api';
 
-export const Home = () => {
+const Home = () => {
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
@@ -11,15 +11,16 @@ export const Home = () => {
 
   const fetchTrendingMovies = async () => {
     try {
-      const responce = await getTrendingMovies();
-      setMovies(responce.results);
+      const response = await getTrendingMovies();
+      setMovies(response.results);
     } catch (error) {
       console.log('Error:', error.message);
     }
   };
+
   return (
     <div>
-      <h2>Trendings Movies</h2>
+      <h2>Trending Movies</h2>
       <ul>
         {movies.map(movie => (
           <li key={movie.id}>
