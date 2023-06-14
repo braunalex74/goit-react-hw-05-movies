@@ -13,37 +13,21 @@ export const MovieDetails = () => {
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
-    fetchMovieDetails();
-    fetchMovieCredits();
-    fetchMovieReviews();
-  }, []);
+    const fetchMovieData = async () => {
+      try {
+        const movieDetails = await getMovieDetails(movieId);
+        const movieCredits = await getMovieCredits(movieId);
+        const movieReviews = await getMovieReviews(movieId);
+        setMovie(movieDetails);
+        setCredits(movieCredits);
+        setReviews(movieReviews);
+      } catch (error) {
+        console.log('Error:', error.message);
+      }
+    };
 
-  const fetchMovieDetails = async () => {
-    try {
-      const response = await getMovieDetails(movieId);
-      setMovie(response);
-    } catch (error) {
-      console.log('Error:', error.message);
-    }
-  };
-
-  const fetchMovieCredits = async () => {
-    try {
-      const response = await getMovieCredits(movieId);
-      setCredits(response);
-    } catch (error) {
-      console.log('Error:', error.message);
-    }
-  };
-
-  const fetchMovieReviews = async () => {
-    try {
-      const response = await getMovieReviews(movieId);
-      setReviews(response);
-    } catch (error) {
-      console.log('Error:', error.message);
-    }
-  };
+    fetchMovieData();
+  }, [movieId]);
 
   if (!movie) {
     return <div>Loading...</div>;
