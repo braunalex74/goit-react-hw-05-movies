@@ -1,43 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { getMovieCast } from '../../api/api';
+import { useEffect, useState } from 'react';
+import { getMovieCredits } from '../../api/api';
 
-const Cast = () => {
-  const { movieId } = useParams();
+const Cast = ({ movieId }) => {
   const [cast, setCast] = useState([]);
 
   useEffect(() => {
-    fetchMovieCast();
-  }, []);
+    const fetchMovieCast = async () => {
+      try {
+        const castData = await getMovieCredits(movieId);
+        setCast(castData);
+      } catch (error) {
+        console.error('Error fetching movie cast:', error);
+      }
+    };
 
-  const fetchMovieCast = async () => {
-    try {
-      const response = await getMovieCast(movieId);
-      setCast(response);
-    } catch (error) {
-      console.log('Error:', error.message);
-    }
-  };
+    fetchMovieCast();
+  }, [movieId]);
 
   return (
     <div>
-      <h2>Movie Cast</h2>
-      {cast.length > 0 ? (
-        <ul>
-          {cast.map(member => (
-            <li key={member.id}>
-              <img
-                src={`https://image.tmdb.org/t/p/w200${member.profile_path}`}
-                alt={member.name}
-              />
-              <p>Name: {member.name}</p>
-              <p>Character: {member.character}</p>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No cast information available</p>
-      )}
+      <h2>Cast</h2>
+      <ul>
+        {cast.map(actor => (
+          <li key={actor.id}>{actor.name}</li>
+        ))}
+      </ul>
     </div>
   );
 };
