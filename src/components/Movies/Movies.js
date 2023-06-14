@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getTrendingMovies } from '../../api/api';
 
-export const Movies = () => {
+const Movies = () => {
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {

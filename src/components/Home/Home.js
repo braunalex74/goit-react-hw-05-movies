@@ -12,7 +12,7 @@ const Home = () => {
   const fetchTrendingMovies = async () => {
     try {
       const response = await getTrendingMovies();
-      setMovies(response.results);
+      setMovies(response);
     } catch (error) {
       console.log('Error:', error.message);
     }

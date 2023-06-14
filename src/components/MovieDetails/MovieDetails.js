@@ -6,7 +6,7 @@ import {
   getMovieReviews,
 } from '../../api/api';
 
-export const MovieDetails = () => {
+const MovieDetails = () => {
   const { movieId } = useParams();
   const [movie, setMovie] = useState(null);
   const [credits, setCredits] = useState([]);

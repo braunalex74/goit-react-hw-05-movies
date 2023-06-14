@@ -1,19 +1,14 @@
 import React from 'react';
-import { Router, Route, Routes } from 'react-router-dom';
-import { createBrowserHistory } from 'history';
-
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './Home/Home';
 import Movies from './Movies/Movies';
 import MovieDetails from './MovieDetails/MovieDetails';
 import Cast from './Cast/Cast';
 import Reviews from './Reviews/Reviews';
 
-const history = createBrowserHistory();
-
-export const App = () => {
+const App = () => {
   return (
-    <Router history={history}>
-      {' '}
+    <Router>
       <div>
         <Routes>
           <Route path="/" element={<Home />} />
