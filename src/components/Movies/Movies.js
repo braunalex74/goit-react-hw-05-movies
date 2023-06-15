@@ -4,6 +4,7 @@ import MoviesList from '../MovieList/MovieList';
 
 const Movies = () => {
   const [movies, setMovies] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchTrendingMovies();
@@ -11,12 +12,16 @@ const Movies = () => {
 
   const fetchTrendingMovies = async () => {
     try {
-      const response = await getTrendingMovies();
-      setMovies(response);
+      const trendingMovies = await getTrendingMovies();
+      setMovies(trendingMovies);
     } catch (error) {
-      console.log('Error:', error.message);
+      setError(error.message);
     }
   };
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div>
