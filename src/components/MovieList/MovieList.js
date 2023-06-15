@@ -1,37 +1,29 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { css } from '@emotion/react';
+import React, { useEffect, useState } from 'react';
+import { getTrendingMovies } from '../../api/api';
+import MoviesList from '../MovieList/MovieList';
 
-const styles = {
-  ul: css`
-    list-style: none;
-    padding: 0;
-  `,
-  li: css`
-    margin-bottom: 8px;
-  `,
-  link: css`
-    color: #333;
-    text-decoration: none;
+const Movies = () => {
+  const [movies, setMovies] = useState([]);
 
-    &:hover {
-      text-decoration: underline;
+  useEffect(() => {
+    fetchTrendingMovies();
+  }, []);
+
+  const fetchTrendingMovies = async () => {
+    try {
+      const response = await getTrendingMovies();
+      setMovies(response);
+    } catch (error) {
+      console.log('Error:', error.message);
     }
-  `,
-};
+  };
 
-const MoviesList = ({ movies }) => {
   return (
-    <ul css={styles.ul}>
-      {movies.map(movie => (
-        <li key={movie.id} css={styles.li}>
-          <Link to={`/movies/${movie.id}`} css={styles.link}>
-            {movie.title}
-          </Link>
-        </li>
-      ))}
-    </ul>
+    <div>
+      <h2>Movies</h2>
+      <MoviesList movies={movies} />
+    </div>
   );
 };
 
-export default MoviesList;
+export default Movies;
