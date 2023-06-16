@@ -1,24 +1,23 @@
 import React from 'react';
 import { lazy } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
+
 const Home = lazy(() => import('./Home/Home'));
 const Movies = lazy(() => import('./Movies/Movies'));
 const MovieDetails = lazy(() => import('./MovieDetails/MovieDetails'));
 const Cast = lazy(() => import('./Cast/Cast'));
 const Reviews = lazy(() => import('./Reviews/Reviews'));
 
-export const App = () => {
+const App = () => {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="movies" element={<Movies />} />
-        <Route path="movies/:movieId" element={<MovieDetails />} />
-        <Route path="movies/:movieId/cast" element={<Cast />} />
-        <Route path="/movies/:movieId/reviews" element={<Reviews />} />
-        <Route path="*" element={<div> Nothing found </div>} />
-      </Routes>
-    </Router>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="movies" element={<Movies />} />
+      <Route path="movies/:movieId" element={<MovieDetails />} />
+      <Route path="movies/:movieId/cast" element={<Cast />} />
+      <Route path="/movies/:movieId/reviews" element={<Reviews />} />
+      <Route path="*" element={<div>Nothing found</div>} />
+    </Routes>
   );
 };
 
