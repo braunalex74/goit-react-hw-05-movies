@@ -5,7 +5,17 @@ import {
   getMovieCredits,
   getMovieReviews,
 } from '../../api/api';
-import Cast from '../Cast/Cast';
+import {
+  MovieDetailsContainer,
+  MovieInfoContainer,
+  Details,
+  Poster,
+  CastContainer,
+  CastList,
+  CastItem,
+  CastImage,
+  Button,
+} from './MovieDetails.styled';
 
 const MovieDetails = () => {
   const { movieId } = useParams();
@@ -64,29 +74,47 @@ const MovieDetails = () => {
   }
 
   return (
-    <div>
+    <MovieDetailsContainer>
       <button onClick={handleGoBack}>Go Back</button>
       <h2>{movie.title}</h2>
-      <img
-        src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-        alt={movie.title}
-      />
-      <p>Release Date: {movie.release_date}</p>
-      <p>Overview: {movie.overview}</p>
-      <button onClick={handleToggleCast}>
+      <MovieInfoContainer>
+        <Poster>
+          <img
+            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+            alt={movie.title}
+          />
+        </Poster>
+        <Details>
+          <p>Release Date: {movie.release_date}</p>
+          <p>Overview: {movie.overview}</p>
+        </Details>
+      </MovieInfoContainer>
+      <Button onClick={handleToggleCast}>
         {showCast ? 'Hide Cast' : 'Show Cast'}
-      </button>
+      </Button>
 
       {showCast && (
         <div>
-          <Cast credits={credits} />{' '}
-          {/* Додано компонент Cast та передано пропс credits */}
+          <CastContainer>
+            <h3>Cast</h3>
+            <CastList>
+              {credits.map(castMember => (
+                <CastItem key={castMember.id}>
+                  <CastImage
+                    src={`https://image.tmdb.org/t/p/w200${castMember.profile_path}`}
+                    alt={castMember.name}
+                  />
+                  {castMember.name}
+                </CastItem>
+              ))}
+            </CastList>
+          </CastContainer>
         </div>
       )}
 
-      <button onClick={handleToggleReviews}>
+      <Button onClick={handleToggleReviews}>
         {showReviews ? 'Hide Reviews' : 'Show Reviews'}
-      </button>
+      </Button>
 
       {showReviews && (
         <div>
@@ -101,7 +129,7 @@ const MovieDetails = () => {
           </ul>
         </div>
       )}
-    </div>
+    </MovieDetailsContainer>
   );
 };
 
