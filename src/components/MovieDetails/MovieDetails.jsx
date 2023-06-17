@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
   getMovieDetails,
   getMovieCredits,
   getMovieReviews,
 } from '../../api/api';
+import Cast from '../Cast/Cast';
 
 const MovieDetails = () => {
   const { movieId } = useParams();
+  const navigate = useNavigate();
   const [movie, setMovie] = useState(null);
   const [credits, setCredits] = useState([]);
   const [reviews, setReviews] = useState([]);
@@ -53,12 +55,17 @@ const MovieDetails = () => {
     setShowReviews(!showReviews);
   };
 
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+
   if (!movie) {
     return <div>Loading...</div>;
   }
 
   return (
     <div>
+      <button onClick={handleGoBack}>Go Back</button>
       <h2>{movie.title}</h2>
       <img
         src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
@@ -72,12 +79,8 @@ const MovieDetails = () => {
 
       {showCast && (
         <div>
-          <h3>Cast</h3>
-          <ul>
-            {credits.map(castMember => (
-              <li key={castMember.id}>{castMember.name}</li>
-            ))}
-          </ul>
+          <Cast credits={credits} />{' '}
+          {/* Додано компонент Cast та передано пропс credits */}
         </div>
       )}
 
