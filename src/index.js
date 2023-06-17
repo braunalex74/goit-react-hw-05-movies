@@ -7,7 +7,7 @@ import './index.css';
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Suspense fallback={<div>Loading...</div>}>
     <React.StrictMode>
-      <BrowserRouter basename="Movies">
+      <BrowserRouter basename="goit-react-hw-05-movies">
         <App />
       </BrowserRouter>
     </React.StrictMode>

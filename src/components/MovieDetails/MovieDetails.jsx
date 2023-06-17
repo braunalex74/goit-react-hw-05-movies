@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link, Routes, Route } from 'react-router-dom';
 import {
   getMovieDetails,
   getMovieCredits,
   getMovieReviews,
 } from '../../api/api';
+import Cast from '../Cast/Cast';
+import Reviews from '../Reviews/Reviews';
 
 const MovieDetails = () => {
   const { movieId } = useParams();
@@ -36,25 +38,35 @@ const MovieDetails = () => {
   return (
     <div>
       <h2>{movie.title}</h2>
+      <img
+        src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+        alt={movie.title}
+      />
+
       <p>Release Date: {movie.release_date}</p>
       <p>Overview: {movie.overview}</p>
 
-      <h3>Cast:</h3>
-      <ul>
-        {credits.map(castMember => (
-          <li key={castMember.id}>{castMember.name}</li>
-        ))}
-      </ul>
-
-      <h3>Reviews:</h3>
-      <ul>
-        {reviews.map(review => (
-          <li key={review.id}>
-            <p>Author: {review.author}</p>
-            <p>{review.content}</p>
+      <nav>
+        <ul>
+          <li>
+            <Link to={`/movies/${movieId}/cast`}>Cast</Link>
           </li>
-        ))}
-      </ul>
+          <li>
+            <Link to={`/movies/${movieId}/reviews`}>Reviews</Link>
+          </li>
+        </ul>
+      </nav>
+
+      <Routes>
+        <Route
+          path="/movies/:movieId/cast"
+          element={<Cast credits={credits} />}
+        />
+        <Route
+          path="/movies/:movieId/reviews"
+          element={<Reviews reviews={reviews} />}
+        />
+      </Routes>
     </div>
   );
 };

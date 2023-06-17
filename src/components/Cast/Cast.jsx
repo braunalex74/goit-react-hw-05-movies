@@ -1,28 +1,30 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { getMovieCredits } from '../../api/api';
 
-const Cast = ({ movieId }) => {
-  const [cast, setCast] = useState([]);
+const Cast = () => {
+  const { movieId } = useParams();
+  const [credits, setCredits] = useState([]);
 
   useEffect(() => {
-    const fetchMovieCast = async () => {
+    const fetchMovieCredits = async () => {
       try {
-        const castData = await getMovieCredits(movieId);
-        setCast(castData);
+        const creditsData = await getMovieCredits(movieId);
+        setCredits(creditsData);
       } catch (error) {
-        console.error('Error fetching movie cast:', error);
+        console.error('Error fetching movie credits:', error);
       }
     };
 
-    fetchMovieCast();
+    fetchMovieCredits();
   }, [movieId]);
 
   return (
     <div>
       <h2>Cast</h2>
       <ul>
-        {cast.map(actor => (
-          <li key={actor.id}>{actor.name}</li>
+        {credits.map(castMember => (
+          <li key={castMember.id}>{castMember.name}</li>
         ))}
       </ul>
     </div>
