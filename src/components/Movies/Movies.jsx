@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { searchMovies } from '../../api/api';
 import MovieList from '../MovieList/MovieList';
 import MovieDetails from '../MovieDetails/MovieDetails';
@@ -10,14 +10,14 @@ const Movies = () => {
   const [error, setError] = useState(null);
   const [searched, setSearched] = useState(false);
 
-  const fetchSearchedMovies = async () => {
+  const fetchSearchedMovies = useCallback(async () => {
     try {
       const searchedMovies = await searchMovies(searchQuery);
       setMovies(searchedMovies);
     } catch (error) {
       setError(error.message);
     }
-  };
+  }, [searchQuery]);
 
   const handleSearch = async () => {
     setSearched(true);
@@ -40,7 +40,7 @@ const Movies = () => {
     if (searched) {
       fetchSearchedMovies();
     }
-  }, [searched]);
+  }, [searched, fetchSearchedMovies]);
 
   if (error) {
     return <div>Error: {error}</div>;
