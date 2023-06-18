@@ -1,15 +1,14 @@
-import React, { Suspense } from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import ReactDOM from 'react-dom/client';
-import App from 'components/App';
-import './index.css';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { SearchProvider } from './components/SearchContext/SearchContext';
+import App from './components/App';
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <Suspense fallback={<div>Loading...</div>}>
-    <React.StrictMode>
-      <BrowserRouter basename="goit-react-hw-05-movies">
-        <App />
-      </BrowserRouter>
-    </React.StrictMode>
-  </Suspense>
+ReactDOM.render(
+  <Router>
+    <SearchProvider>
+      <App />
+    </SearchProvider>
+  </Router>,
+  document.getElementById('root')
 );

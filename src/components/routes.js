@@ -1,11 +1,11 @@
 // import React from 'react';
 // import { Route } from 'react-router-dom';
 
-// const Home = React.lazy(() => import('./components/Home'));
-// const Movies = React.lazy(() => import('./components/Movies'));
-// const MovieDetails = React.lazy(() => import('./components/MovieDetails'));
-// const Cast = React.lazy(() => import('./components/Cast'));
-// const Reviews = React.lazy(() => import('./components/Reviews'));
+// const Home = React.lazy(() => import('./Home/Home'));
+// const Movies = React.lazy(() => import('./Movies/Movies'));
+// const MovieDetails = React.lazy(() => import('./MovieDetails/MovieDetails'));
+// const Cast = React.lazy(() => import('./Cast/Cast'));
+// const Reviews = React.lazy(() => import('./Reviews/Reviews'));
 
 // export const routes = [
 //   {
