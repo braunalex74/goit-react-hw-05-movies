@@ -1,14 +1,17 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { searchMovies } from '../../api/api';
 import MovieList from '../MovieList/MovieList';
 import MovieDetails from '../MovieDetails/MovieDetails';
 
 const Movies = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [movies, setMovies] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedMovie, setSelectedMovie] = useState(null);
+  const [selectedMovieId, setSelectedMovieId] = useState(null);
+  const [prevSearchQuery, setPrevSearchQuery] = useState('');
   const [error, setError] = useState(null);
-  const [searched, setSearched] = useState(false);
 
   const fetchSearchedMovies = useCallback(async () => {
     try {
@@ -19,37 +22,58 @@ const Movies = () => {
     }
   }, [searchQuery]);
 
-  const handleSearch = async () => {
-    setSearched(true);
-    fetchSearchedMovies();
-  };
+  const handleSearch = useCallback(() => {
+    navigate(
+      `/goit-react-hw-05-movies/movies?search=${encodeURIComponent(
+        searchQuery
+      )}`
+    );
+  }, [navigate, searchQuery]);
 
-  const handleChange = e => {
-    setSearchQuery(e.target.value);
-  };
+  const handleSelectMovie = useCallback(
+    movieId => {
+      setSelectedMovieId(movieId);
+      navigate(`/goit-react-hw-05-movies/movies/${movieId}`);
+    },
+    [navigate]
+  );
 
-  const handleSelectMovie = movie => {
-    setSelectedMovie(movie);
-  };
-
-  const handleBack = () => {
-    setSelectedMovie(null);
-  };
+  const handleBack = useCallback(() => {
+    setSelectedMovieId(null);
+    setSearchQuery(prevSearchQuery);
+    navigate('../'); // or navigate('/goit-react-hw-05-movies/movies')
+  }, [prevSearchQuery, navigate]);
 
   useEffect(() => {
-    if (searched) {
+    const searchParam = new URLSearchParams(location.search).get('search');
+    if (searchParam) {
+      setSearchQuery(searchParam);
+      setPrevSearchQuery(searchParam);
+    }
+  }, [location.search]);
+
+  useEffect(() => {
+    if (searchQuery !== '') {
       fetchSearchedMovies();
     }
-  }, [searched, fetchSearchedMovies]);
+  }, [searchQuery, fetchSearchedMovies]);
+
+  useEffect(() => {
+    const movieId = location.pathname.split('/').pop();
+    if (movieId && !isNaN(movieId)) {
+      setSelectedMovieId(parseInt(movieId));
+    }
+  }, [location.pathname]);
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div>Помилка: {error}</div>;
   }
 
-  if (selectedMovie) {
+  if (selectedMovieId) {
+    const selectedMovie = movies.find(movie => movie.id === selectedMovieId);
     return (
       <div>
-        <button onClick={handleBack}>Back</button>
+        <button onClick={handleBack}>Назад</button>
         <MovieDetails movie={selectedMovie} />
       </div>
     );
@@ -57,24 +81,17 @@ const Movies = () => {
 
   return (
     <div>
-      <h2>Movies</h2>
-      {!selectedMovie && (
-        <div>
-          {!searched && (
-            <div>
-              <input type="text" value={searchQuery} onChange={handleChange} />
-              <button onClick={handleSearch}>Search</button>
-            </div>
-          )}
-          {searched && (
-            <div>
-              <MovieList movies={movies} onSelectMovie={handleSelectMovie} />
-            </div>
-          )}
-        </div>
-      )}
+      <h2>Фільми</h2>
+      <MovieList movies={movies} onSelectMovie={handleSelectMovie} />
+      <div>
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={e => setSearchQuery(e.target.value)}
+        />
+        <button onClick={handleSearch}>Пошук</button>
+      </div>
     </div>
   );
 };
-
 export default Movies;
