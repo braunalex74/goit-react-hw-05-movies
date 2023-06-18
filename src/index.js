@@ -1,14 +1,14 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
-import { SearchProvider } from './components/SearchContext/SearchContext';
-import App from './components/App';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
 
-ReactDOM.render(
-  <Router>
-    <SearchProvider>
+import { App } from 'components/App/App';
+import './index.css';
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <BrowserRouter basename="/goit-react-hw-05-movies">
       <App />
-    </SearchProvider>
-  </Router>,
-  document.getElementById('root')
+    </BrowserRouter>
+  </React.StrictMode>
 );

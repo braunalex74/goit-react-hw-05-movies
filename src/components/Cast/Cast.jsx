@@ -1,39 +1,51 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getMovieCredits } from '../../api/api';
+import { getCastMovie } from 'services/getMovies';
+import { BASE_POSTER_URL, PLACEHOLDER } from 'utils/constants';
+import { ListItem, StyledList } from './Cast.module';
 
 const Cast = () => {
   const { movieId } = useParams();
-  const [credits, setCredits] = useState([]);
+
+  const [cast, setCast] = useState([]);
 
   useEffect(() => {
-    const fetchMovieCredits = async () => {
+    const fetchCast = async () => {
       try {
-        const creditsData = await getMovieCredits(movieId);
-        setCredits(creditsData);
-      } catch (error) {
-        console.error('Error fetching movie credits:', error);
+        const cast = await getCastMovie(movieId);
+        setCast(cast);
+      } catch (e) {
+        console.log(e);
       }
     };
-
-    fetchMovieCredits();
+    fetchCast();
   }, [movieId]);
 
   return (
-    <div>
-      <h2>Cast</h2>
-      <ul>
-        {credits.map(castMember => (
-          <li key={castMember.id}>
-            <img
-              src={`https://image.tmdb.org/t/p/w200${castMember.profile_path}`}
-              alt={castMember.name}
-            />
-            {castMember.name}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <>
+      {
+        <StyledList>
+          {cast.map(({ id, profile_path, original_name, character }) => (
+            <ListItem key={id}>
+              <img
+                src={`${
+                  profile_path
+                    ? BASE_POSTER_URL + profile_path
+                    : PLACEHOLDER + '?text=' + original_name
+                }`}
+                alt={original_name}
+              />
+              <p>
+                <span> Actor:</span> {original_name}
+              </p>
+              <p>
+                <span>Character:</span> {character}
+              </p>
+            </ListItem>
+          ))}
+        </StyledList>
+      }
+    </>
   );
 };
 
